@@ -1,0 +1,13 @@
+Package: cepsvizfunctions
+Type: Package
+Title: Functions for Weldon Cooper Center Clean Economy Project, UVA
+Version: 0.1.0
+Author: Lauren Coppins <lmc7ud@virginia.edu>
+Maintainer: Lauren Coppins <lmc7ud@virginia.edu>
+Description: This package includes the preset themes and visualization functions used to create figures 
+    for the Weldon Cooper Center Clean Economy Project at the University of Virginia. 
+Depends: data.table
+License: MIT
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
