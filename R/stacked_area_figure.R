@@ -95,7 +95,7 @@ stacked_area_figure <- function(data_table_list,merge_variable,value_unit,title_
   ceps_pal <- c("#00A087B2", "#3C5488B2", "#CEA5AC", "#BE7E8A", "#4DBBD5B2", "#91D1C2B2","#D9C6C9","#8491B4B2","#5868AC","#6FB3D9","#56BD96","#99A9E2","#A94F64","#B0DEFA","#99EEBB","#8FD3FE")
 
   figure <- ggplot(lf_working_table,aes(x=x_unit,y=value,fill=variable)) +
-    geom_area(aes(group=variable,text=paste0(x_label,": ",x_unit,"\n","Value: ",value,"\n","Variable: ",variable))) +
+    geom_area(aes(group=variable,text=paste0(x_label,": ",x_unit,"\n","Value: ",round(value,4),"\n","Variable: ",variable))) +
     ylab(value_unit) + xlab(x_label) + ylim(lower_limit,upper_limit) +
     labs(title=title_name,subtitle=subtitle_description,caption=source_description) +
     scale_fill_manual(name=NULL,values=ceps_pal[1:category_count]) +

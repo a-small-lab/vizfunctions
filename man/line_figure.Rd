@@ -16,11 +16,12 @@ line_figure(
   return_static = TRUE,
   source_citation = NULL,
   modifications = NULL,
-  subtitle_description = NULL
+  subtitle_description = NULL,
+  future_date = NULL
 )
 }
 \arguments{
-\item{subtitle_description}{}
+\item{future_date}{}
 }
 \value{
 figure

@@ -12,10 +12,11 @@
 #' @param source_citation
 #' @param modifications
 #' @param subtitle_description
+#' @param future_date
 #'
 #' @return figure
 #' @export
-line_figure <- function(data_table_list,merge_variable,value_unit,title_name,character_list=NULL,x_label="Year",lower_limit=0,upper_limit=NA,return_static=TRUE,source_citation=NULL,modifications=NULL,subtitle_description=NULL){
+line_figure <- function(data_table_list,merge_variable,value_unit,title_name,character_list=NULL,x_label="Year",lower_limit=0,upper_limit=NA,return_static=TRUE,source_citation=NULL,modifications=NULL,subtitle_description=NULL,future_date=NULL){
   #data_table_list is a list of data tables which should be ready to be merged into one table
   #       *if only one table is included in input list (note that it still must be in list form), this table should be ready to be plotted i.e it should include a variable and value column and an x-value (usually date or year) column
   #merge_variable is a character description of which variable the merge should be performed on (ex:"date","year) if applicable; it should also be the x-axis being graphed
@@ -32,6 +33,10 @@ line_figure <- function(data_table_list,merge_variable,value_unit,title_name,cha
   #modifications defaults to NULL, in which case nothing would be added to the figure, but can be set if additional modifications are needed
   #       *examples of different modifications which may be necessary are scaling the y-axis or removing the legend
   #subtitle_description defaults to NULL, but can be added if desired
+  #future_date defaults to NULL and should only be given a value if the plot is showing future and past values, and it is desired that the future values be dashed
+  #       *the format of future_date must match the format of whatever the x unit variable is
+  #       *ex: if year is on x-axis, future_date = 2021 or if date (in y/m/d format) is on x-axis, future_date = '2021-01-01'
+  #       *note also that this only works when there is both historic and future data
 
   library(ggplot2)
   if(!("Hmisc" %in% installed.packages())) install.packages("Hmisc")
@@ -94,14 +99,27 @@ line_figure <- function(data_table_list,merge_variable,value_unit,title_name,cha
   category_count <- length(unique(lf_working_table$variable))
   ceps_pal <- c("#00A087B2", "#3C5488B2", "#CEA5AC", "#BE7E8A", "#4DBBD5B2", "#91D1C2B2","#D9C6C9","#8491B4B2","#5868AC","#6FB3D9","#56BD96","#99A9E2","#A94F64","#B0DEFA","#99EEBB","#8FD3FE")
 
-  figure <- ggplot(lf_working_table, aes(x=x_unit,y=value,color=variable)) +
-    geom_line(aes(group=variable,text=paste0(x_label,": ",x_unit,"\n","Value: ",value,"\n","Variable: ",variable))) +
-    ylab(value_unit) + xlab(x_label) + ylim(lower_limit,upper_limit) +
-    labs(title=title_name,subtitle=subtitle_description,caption=source_description) +
-    scale_color_manual(name=NULL,values=ceps_pal[1:category_count])+
-    theme_ceps()+
-    modifications
-  figure
+  if(is.null(future_date)){
+    figure <- ggplot(lf_working_table, aes(x=x_unit,y=value,color=variable)) +
+      geom_line(aes(group=variable,text=paste0(x_label,": ",x_unit,"\n","Value: ",round(value,4),"\n","Variable: ",variable))) +
+      ylab(value_unit) + xlab(x_label) + ylim(lower_limit,upper_limit) +
+      labs(title=title_name,subtitle=subtitle_description,caption=source_description) +
+      scale_color_manual(name=NULL,values=ceps_pal[1:category_count])+
+      theme_ceps()+
+      modifications
+    figure
+  }
+  else{
+    figure <- ggplot() +
+      geom_line(data=lf_working_table[x_unit<future_date],mapping=aes(x=x_unit,y=value,color=variable,group=variable,text=paste0(x_label,": ",x_unit,"\n","Value: ",round(value,4),"\n","Variable: ",variable))) +
+      geom_line(data=lf_working_table[x_unit>=future_date],mapping=aes(x=x_unit,y=value,color=variable,group=variable,text=paste0(x_label,": ",x_unit,"\n","Value: ",round(value,4),"\n","Variable: ",variable)),linetype="dashed") +
+      ylab(value_unit) + xlab(x_label) + ylim(lower_limit,upper_limit) +
+      labs(title=title_name,subtitle=subtitle_description,caption=source_description) +
+      scale_color_manual(name=NULL,values=ceps_pal[1:category_count])+
+      theme_ceps()+
+      modifications
+    figure
+  }
 
   return_list <- list(figure=figure,x_label=x_label,source_description=source_description,title_name=title_name,subtitle_description=subtitle_description,y_label=value_unit)
 
@@ -110,4 +128,3 @@ line_figure <- function(data_table_list,merge_variable,value_unit,title_name,cha
   else
   {return(return_list)}
 }
-
