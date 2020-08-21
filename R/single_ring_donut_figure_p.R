@@ -57,11 +57,11 @@ single_ring_donut_figure_p <- function(data_table,description_of_goal,top_descri
             domain = list(x = c(0, 1), y = c(0, 1)),
             marker=list(colors=colors_list,
                         line=list(color="white",width=1))) %>%
-    layout(title=list(text=top_description,font = list(color="dimgrey",size=14,family = "Helvetica"),x=0.55),showlegend = F,
+    layout(title=list(text=top_description,font = list(color="dimgrey",size=11,family = "Helvetica"),x=0.55),showlegend = F,
            font = list(family="Helvetica",color="dimgrey",size=14),
            paper_bgcolor="#F0F0F0", plot_bgcolor="#F0F0F0") %>%
     add_annotations(x=0.5,y=0.5,text=paste0(description_of_goal,"<br>","<sub>",bottom_description),showarrow=F,font = list(color = "dimgrey",size = 14,family = "Helvetica")) %>%
-    add_annotations(x=0.5,y=-0.09,text=paste0("<i>","<sub>",source_description,"<sub>","</i>"),showarrow=F,font = list(color = "dimgrey",size = 14,family = "Helvetica"))%>%
+    add_annotations(x=0.5,y=-0.09,text=paste0("<i>","<sub>",source_description,"<sub>","</i>"),showarrow=F,font = list(color = "dimgrey",size = 13,family = "Helvetica"))%>%
     config(displaylogo = FALSE,
            modeBarButtonsToRemove = c("zoomIn2d", "zoomOut2d","pan2d","select2d","lasso2d","hoverCompareCartesian","zoom2d"))
   figure
